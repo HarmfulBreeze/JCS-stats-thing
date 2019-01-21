@@ -13,8 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/callback', function () {
-    return response(null, 202);
+Route::post('/callback', function (string $json) {
+    $decoded = \GuzzleHttp\json_decode($json);
+    return response(\GuzzleHttp\json_encode($decoded), 200);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
