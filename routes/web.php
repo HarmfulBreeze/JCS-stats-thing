@@ -11,10 +11,6 @@
 |
 */
 
-Route::post('/callback', function () {
-    return 200;
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
