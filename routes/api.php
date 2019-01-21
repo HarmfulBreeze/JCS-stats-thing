@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/callback', function (string $json) {
+Route::post('/callback', function (Request $request) {
+    $json = $request->getContent();
     $decoded = \GuzzleHttp\json_decode($json);
     return response(\GuzzleHttp\json_encode($decoded), 200);
 });
