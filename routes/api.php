@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/callback', function () {
-    return 200;
+    return response(null, 202);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
