@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::post('/callback', function (Request $request) {
     $encoded = $request->getContent();
-    $json = json_decode($encoded, true);
+    $json = json_decode($encoded);
 
     $tournament_code = $json->{'shortCode'};
 
