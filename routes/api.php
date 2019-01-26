@@ -14,9 +14,12 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/callback', function (Request $request) {
-    $json = $request->getContent();
-    $decoded = \GuzzleHttp\json_decode($json);
-    return response(\GuzzleHttp\json_encode($decoded), 200);
+    $encoded = $request->getContent();
+    $json = json_decode($encoded, true);
+
+    $tournament_code = $json->{'shortCode'};
+
+    return response($tournament_code, 200);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
