@@ -18,6 +18,8 @@ Route::post('/callback', function (Request $request) {
     $json = json_decode($encoded);
 
     $tournament_code = $json->{'shortCode'};
+    $game_id = $json->{'gameId'};
+    DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code]);
 
     return response($tournament_code, 200);
 });
