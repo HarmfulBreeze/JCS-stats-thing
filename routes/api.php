@@ -26,7 +26,7 @@ Route::post('/callback', function (Request $request) {
 
 Route::get('/gameinfo', function () {
     $info = DB::table('games')->select('game_id', 'tournament_code')->get();
-    $a = $info->get('game_id');
+    $a = $info->get('1');
     return response($a, 200);
 });
 
