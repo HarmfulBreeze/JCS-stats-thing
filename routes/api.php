@@ -26,8 +26,8 @@ Route::post('/callback', function (Request $request) {
 
 Route::get('/gameinfo', function () {
     $info = DB::table('games')->select('game_id', 'tournament_code')->get();
-    $a = $info->get(0);
-    return response($a, 200);
+    $json = json_encode($info);
+    return response($json, 200);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
