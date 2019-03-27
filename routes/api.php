@@ -24,9 +24,19 @@ Route::post('/callback', function (Request $request) {
     return response($tournament_code, 200);
 });
 
+// https://www.piorrro33.fr/api/gameinfo
 Route::get('/gameinfo', function () {
     $info = DB::table('games')->select('game_id', 'tournament_code')->get();
     return response()->json($info);
+});
+
+Route::delete('/gameinfo', function (Request $request) {
+    $body = $request->getContent();
+    $json = json_decode($body);
+
+    $game_id = $json->{'gameId'};
+    $success = DB::table('games')->where('game_id', '=', $game_id)->delete();
+    return response($success);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
