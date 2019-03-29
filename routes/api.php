@@ -30,7 +30,7 @@ Route::get('/gameinfo', function () {
     return response()->json($info);
 });
 
-Route::delete('/gameinfo', function (Request $request) {
+Route::post('/deletegameinfo', function (Request $request) {
     $body = $request->getContent();
     $json = json_decode($body);
 
