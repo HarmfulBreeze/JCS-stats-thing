@@ -19,7 +19,7 @@ Route::post('/callback', function (Request $request) {
 
     $tournament_code = $json->{'shortCode'};
     $game_id = $json->{'gameId'};
-    $timestamp = Carbon::now()->toDateTimeString();
+    $timestamp = Carbon::now('Europe/Paris')->toDateTimeString();
     DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code, 'timestamp' => $timestamp]);
 
     return response()->noContent(200);
