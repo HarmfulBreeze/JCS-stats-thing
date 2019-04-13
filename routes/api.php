@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,25 +15,23 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/callback', function (Request $request) {
-    $encoded = $request->getContent();
-    $json = json_decode($encoded);
+    $json = json_decode($request->getContent());
 
     $tournament_code = $json->{'shortCode'};
     $game_id = $json->{'gameId'};
-    DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code]);
+    $timestamp = Carbon::now()->toDateTimeString();
+    DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code, 'timestamp' => $timestamp]);
 
-    return response($tournament_code, 200);
+    return response()->noContent(200);
 });
 
-// https://www.piorrro33.fr/api/gameinfo
 Route::get('/gameinfo', function () {
     $info = DB::table('games')->select('game_id', 'tournament_code')->get();
     return response()->json($info);
 });
 
 Route::post('/deletegameinfo', function (Request $request) {
-    $body = $request->getContent();
-    $json = json_decode($body);
+    $json = json_decode($request->getContent());
 
     $game_id = $json->{'gameId'};
     $success = DB::table('games')->where('game_id', '=', $game_id)->delete();
