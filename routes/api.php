@@ -19,14 +19,14 @@ Route::post('/callback', function (Request $request) {
 
     $tournament_code = $json->{'shortCode'};
     $game_id = $json->{'gameId'};
-    $timestamp = Carbon::now('Europe/Paris')->toDateTimeString();
+    $timestamp = Carbon::createFromTimestamp($json->{'startTime'}, 'Europe/Paris')->toDateTimeString();
     DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code, 'timestamp' => $timestamp]);
 
     return response()->noContent(200);
 });
 
 Route::get('/gameinfo', function () {
-    $info = DB::table('games')->select('game_id', 'tournament_code')->get();
+    $info = DB::table('games')->select('game_id', 'tournament_code', 'timestamp')->get();
     return response()->json($info);
 });
 
