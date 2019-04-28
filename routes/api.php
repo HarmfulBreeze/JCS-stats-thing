@@ -22,8 +22,7 @@ Route::post('/callback', function (Request $request) {
     $timestamp = Carbon::createFromTimestampMs($json->{'startTime'}, 'Europe/Paris')->format('d/m/Y H:i');
 
     // On évite d'avoir la même game qui s'ajoute plusieurs fois
-    $query = DB::raw('IF NOT EXISTS (SELECT * FROM games WHERE game_id = '. $game_id .')' .
-        'INSERT INTO games ([game_id], [tournament_code], [timestamp]) VALUES ('.$game_id.', '.$tournament_code.', '.$timestamp.')');
+    $query = DB::raw(sprintf("IF NOT EXISTS (SELECT * FROM games WHERE game_id = %s)INSERT INTO games ([game_id], [tournament_code], [timestamp]) VALUES (%s, '%s', '%s')", $game_id, $game_id, $tournament_code, $timestamp));
     DB::setDatabaseName('jcs-stats');
     DB::insert($query);
 
