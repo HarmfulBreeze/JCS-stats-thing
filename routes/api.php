@@ -20,7 +20,11 @@ Route::post('/callback', function (Request $request) {
     $tournament_code = $json->{'shortCode'};
     $game_id = $json->{'gameId'};
     $timestamp = Carbon::createFromTimestampMs($json->{'startTime'}, 'Europe/Paris')->format('d/m/Y H:i');
-    DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code, 'timestamp' => $timestamp]);
+
+    // On évite d'avoir la même game qui s'ajoute plusieurs fois
+    if (DB::table('games')->where('game_id', $game_id)->doesntExist()) {
+        DB::table('games')->insert(['game_id' => $game_id, 'tournament_code' => $tournament_code, 'timestamp' => $timestamp]);
+    }
 
     return response()->noContent(200);
 });
@@ -34,8 +38,13 @@ Route::post('/deletegameinfo', function (Request $request) {
     $json = json_decode($request->getContent());
 
     $game_id = $json->{'gameId'};
-    $success = DB::table('games')->where('game_id', '=', $game_id)->delete();
-    return response($success);
+
+    $success = DB::table('games')->where('game_id', $game_id)->delete();
+
+    if ($success === 0) {
+        return response()->noContent(404);
+    }
+    return response()->noContent(200);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
