@@ -22,15 +22,13 @@ Route::post('/callback', function (Request $request) {
     $timestamp = Carbon::createFromTimestampMs($json->{'startTime'}, 'Europe/Paris')->format('d/m/Y H:i');
 
     // On évite d'avoir la même game qui s'ajoute plusieurs fois
-    $query = DB::table('games')->updateOrInsert([
+    DB::table('games')->updateOrInsert([
         'game_id' => $game_id
     ], [
         'game_id' => $game_id,
         'tournament_code' => $tournament_code,
         'timestamp' => $timestamp
     ]);
-    DB::setDatabaseName('jcs-stats');
-    DB::insert($query);
 
     return response()->noContent(200);
 });
