@@ -22,7 +22,7 @@ Route::post('/callback', function (Request $request) {
     $timestamp = Carbon::createFromTimestampMs($json->{'startTime'}, 'Europe/Paris')->format('d/m/Y H:i');
 
     // On évite d'avoir la même game qui s'ajoute plusieurs fois
-    DB::table('games')->updateOrInsert([
+    DB::table('jcs_harmful')->updateOrInsert([
         'game_id' => $game_id
     ], [
         'game_id' => $game_id,
@@ -34,7 +34,7 @@ Route::post('/callback', function (Request $request) {
 });
 
 Route::get('/gameinfo', function () {
-    $info = DB::table('games')->select('game_id', 'tournament_code', 'timestamp')->get();
+    $info = DB::table('jcs_harmful')->select('game_id', 'tournament_code', 'timestamp')->get();
     return response()->json($info);
 });
 
@@ -43,7 +43,7 @@ Route::post('/deletegameinfo', function (Request $request) {
 
     $game_id = $json->{'gameId'};
 
-    $success = DB::table('games')->where('game_id', $game_id)->delete();
+    $success = DB::table('jcs_harmful')->where('game_id', $game_id)->delete();
 
     if ($success === 0) {
         return response()->noContent(404);
